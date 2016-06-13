@@ -1,12 +1,12 @@
 Name:		snap-confine
-Version:	2.0
+Version:	1.0.29
 Release:	1%{?dist}
 Summary:	Confinement system for snap applications
 
 Group:		System Environment/Base
 License:	GPLv3
 URL:		https://github.com/ubuntu-core/snap-confine
-Source0:	%{name}-%{version}.tar.gz
+Source0:	https://github.com/ubuntu-core/snap-confine/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:	indent
 BuildRequires:	autoconf
@@ -31,17 +31,14 @@ make %{?_smp_mflags}
 
 %install
 %make_install
-install -m 755 -d %{buildroot}/%{_libdir}
-mv %{buildroot}/%{_bindir}/snap-confine %{buildroot}/%{_libdir}/
 
 
 %files
 %doc README.md PORTING
-%attr(4755, root, root) %{_libdir}/snap-confine
+%attr(4755, root, root) %{_libexecdir}/snap-confine
 %{_bindir}/*
-%{_libdir}/*
 
 
 %changelog
-* Sat Jun 04 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.0-1
+* Sat Jun 04 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.29-1
 - Initial version of the package
