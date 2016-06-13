@@ -57,6 +57,7 @@ BuildRequires: golang(github.com/jessevdk/go-flags)
 BuildRequires: golang(github.com/mvo5/goconfigparser)
 BuildRequires: golang(github.com/mvo5/uboot-go/uenv)
 BuildRequires: golang(golang.org/x/crypto/ssh/terminal)
+BuildRequires: golang(gopkg.in/check.v1)
 BuildRequires: golang(gopkg.in/tomb.v2)
 BuildRequires: golang(gopkg.in/yaml.v2)
 %endif
