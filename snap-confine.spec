@@ -5,8 +5,8 @@ Summary:	Confinement system for snap applications
 
 Group:		System Environment/Base
 License:	GPLv3
-URL:		https://github.com/ubuntu-core/snap-confine
-Source0:	https://github.com/ubuntu-core/snap-confine/releases/download/%{version}/%{name}-%{version}.tar.gz
+URL:		https://github.com/snapcore/snap-confine
+Source0:	https://github.com/snapcore/snap-confine/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:	indent
 BuildRequires:	autoconf
@@ -15,7 +15,7 @@ BuildRequires:	gcc
 
 %description
 The package is used internally by snapd to apply confinement to the started
-application process.
+snap applications.
 
 
 %prep
