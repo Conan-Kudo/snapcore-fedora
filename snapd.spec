@@ -25,11 +25,11 @@
 # https://github.com/snapcore/snapd
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          14ff9e23e48de107b34938a398a319bbb38730be
+%global commit          3a332bd5a475dc651ea5d092f4c84ac06891b2c2
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           snapd
-Version:        2.0.8
+Version:        2.0.8.1
 Release:        1%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files. 
 License:        GPL-3
@@ -262,5 +262,7 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
-* Fri Jun 10 2016 Zygmunt Krynicki - 0-0.1.git98b7b91
+* Tue Jun 14 2016 Zygmunt Krynicki - 2.0.8.1
+- New upstream release
+* Fri Jun 10 2016 Zygmunt Krynicki - 2.0.8
 - First package for Fedora
