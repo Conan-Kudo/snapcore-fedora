@@ -1,5 +1,5 @@
 Name:		snap-confine
-Version:	1.0.29
+Version:	1.0.30
 Release:	1%{?dist}
 Summary:	Confinement system for snap applications
 
@@ -40,5 +40,8 @@ make %{?_smp_mflags}
 
 
 %changelog
+* Thu Jun 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.30-1
+- New upstream release
+- Make ubuntu-core-launcher a symlink to snap-confine
 * Sat Jun 04 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.29-1
 - Initial version of the package
