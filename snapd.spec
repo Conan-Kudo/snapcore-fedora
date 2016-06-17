@@ -29,7 +29,7 @@
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           snapd
-Version:        2.0.8.1
+Version:        2.0.9
 Release:        1%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files. 
 License:        GPL-3
@@ -262,6 +262,9 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Fri Jun 17 2016 Zygmunt Krynicki - 2.0.9
+- New upstream release
+  https://github.com/snapcore/snapd/releases/tag/2.0.9
 * Tue Jun 14 2016 Zygmunt Krynicki - 2.0.8.1
 - New upstream release
 * Fri Jun 10 2016 Zygmunt Krynicki - 2.0.8
