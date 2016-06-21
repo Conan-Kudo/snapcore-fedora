@@ -1,5 +1,5 @@
 Name:		snap-confine
-Version:	1.0.32
+Version:	1.0.33
 Release:	1%{?dist}
 Summary:	Confinement system for snap applications
 
@@ -40,6 +40,9 @@ make %{?_smp_mflags}
 
 
 %changelog
+* Tue Jun 21 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.33-1
+- New upstream release
+  https://github.com/snapcore/snap-confine/releases/tag/1.0.33
 * Mon Jun 20 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.32-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.32
