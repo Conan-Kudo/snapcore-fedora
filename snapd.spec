@@ -30,7 +30,7 @@
 
 Name:           snapd
 Version:        2.0.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files. 
 License:        GPL-3
 URL:            https://%{provider_prefix}
@@ -45,6 +45,8 @@ BuildRequires:  systemd
 %{?systemd_requires}
 Requires:       snap-confine
 Requires:       squashfs-tools
+# we need squashfs.ko loaded
+Requires:       kernel-modules
 
 %if ! 0%{?with_bundled}
 BuildRequires: golang(github.com/cheggaaa/pb)
@@ -236,6 +238,7 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 if [ $1 -eq 1 ]; then
         systemctl start snapd.socket
         systemctl start snapd.refresh.timer
+        modprobe squashfs
 fi
 
 %preun
@@ -262,6 +265,10 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Fri Jun 24 2016 Zygmunt Krynicki - 2.0.9-2
+- Depend on kernel-modules to ensure that squashfs can be loaded. Load it afer
+  installing the package. This hopefully fixes
+  https://github.com/zyga/snapcore-fedora/issues/2
 * Fri Jun 17 2016 Zygmunt Krynicki - 2.0.9
 - New upstream release
   https://github.com/snapcore/snapd/releases/tag/2.0.9
