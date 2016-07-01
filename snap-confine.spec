@@ -1,5 +1,5 @@
 Name:		snap-confine
-Version:	1.0.33
+Version:	1.0.34
 Release:	1%{?dist}
 Summary:	Confinement system for snap applications
 
@@ -8,10 +8,14 @@ License:	GPLv3
 URL:		https://github.com/snapcore/snap-confine
 Source0:	https://github.com/snapcore/snap-confine/releases/download/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:	indent
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gcc
+BuildRequires:	glib2-devel
+BuildRequires:	indent
+BuildRequires:	libseccomp-devel
+BuildRequires:	python3-docutils
+BuildRequires:	systemd-devel
 
 %description
 The package is used internally by snapd to apply confinement to the started
@@ -25,8 +29,12 @@ snap applications.
 %build
 autoreconf --force --install --verbose
 # snapd uses seccomp and apparmor, selinux support is not yet available
-%configure --disable-confinement --enable-rootfs-is-core-snap
+%configure --disable-apparmor --enable-rootfs-is-core-snap --libdir=/usr/lib/snapd
 make %{?_smp_mflags}
+
+
+%check
+make check
 
 
 %install
@@ -37,9 +45,15 @@ make %{?_smp_mflags}
 %doc README.md PORTING
 %attr(4755, root, root) %{_libexecdir}/snap-confine
 %{_bindir}/*
+%{_mandir}/*
+/usr/lib/udev/rules.d/80-snappy-assign.rules
+/usr/lib/udev/snappy-app-dev
 
 
 %changelog
+* Fri Jul 1 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.34-1
+- New upstream release
+  https://github.com/snapcore/snap-confine/releases/tag/1.0.34
 * Tue Jun 21 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.33-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.33
