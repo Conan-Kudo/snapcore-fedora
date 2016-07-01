@@ -1,12 +1,13 @@
 Name:		snap-confine
 Version:	1.0.34
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Confinement system for snap applications
 
 Group:		System Environment/Base
 License:	GPLv3
 URL:		https://github.com/snapcore/snap-confine
 Source0:	https://github.com/snapcore/snap-confine/releases/download/%{version}/%{name}-%{version}.tar.gz
+Patch0:		0001-Fix-check-for-CONFINEMENT_TESTS.patch
 
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -25,6 +26,7 @@ snap applications.
 
 %prep
 %setup -q
+%patch0 -p1
 
 
 %build
@@ -52,6 +54,8 @@ make check
 
 
 %changelog
+* Fri Jul 1 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.34-2
+- Apply 0001-Fix-check-for-CONFINEMENT_TESTS.patch to fix build issue on i386
 * Fri Jul 1 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.34-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.34
