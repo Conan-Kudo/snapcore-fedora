@@ -15,6 +15,7 @@ BuildRequires:	glib2-devel
 BuildRequires:	indent
 BuildRequires:	libseccomp-devel
 BuildRequires:	python3-docutils
+BuildRequires:	systemd
 BuildRequires:	systemd-devel
 
 %description
