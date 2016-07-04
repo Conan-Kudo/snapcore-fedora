@@ -25,8 +25,6 @@
 # https://github.com/snapcore/snapd
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          0a4c5419c1134768570addd13ded7fa49a5a4f6d
-%global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           snapd
 Version:        2.0.10
@@ -104,7 +102,7 @@ providing packages with %{import_path} prefix.
 %endif
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{name}-%{version}
 
 %build
 mkdir -p src/github.com/snapcore
