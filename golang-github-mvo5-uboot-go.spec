@@ -46,7 +46,10 @@ BuildRequires: golang(gopkg.in/check.v1)
 %endif
 
 %description
-%{summary}
+A simple go package to allow you to read and write from the serial port as a
+stream of bytes. It aims to have the same API on all platforms, including
+windows.  Currently there is very little in the way of configurability. You
+can set the baud rate.
 
 %if 0%{?with_devel}
 %package devel
