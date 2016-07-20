@@ -23,7 +23,6 @@
 %global project         go-check
 %global repo            check
 # https://github.com/go-check/check
-%global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     gopkg.in/check.v1
 %global commit          64131543e7896d5bcc6bd5a76287eb75ea96c673
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
@@ -33,7 +32,7 @@ Version:        1
 Release:        1.git%{shortcommit}%{?dist}
 Summary:        Rich testing extension for Go's testing package
 License:        BSD
-URL:            https://%{provider_prefix}
+URL:            https://gopkg.in/check.v1
 Source0:        https://github.com/go-check/check/archive/%{commit}.tar.gz#/check-%{shortcommit}.tar.gz
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
