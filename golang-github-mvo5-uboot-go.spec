@@ -46,10 +46,9 @@ BuildRequires: golang(gopkg.in/check.v1)
 %endif
 
 %description
-A simple go package to allow you to read and write from the serial port as a
-stream of bytes. It aims to have the same API on all platforms, including
-windows.  Currently there is very little in the way of configurability. You
-can set the baud rate.
+Small go package/app to read/write uboot env files that contain crc32 + 1 byte
+padding. Unlike fw_{set,print}env it does not needs a /etc/fw_env.config config
+file.
 
 %if 0%{?with_devel}
 %package devel
