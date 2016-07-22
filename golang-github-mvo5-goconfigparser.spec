@@ -46,7 +46,11 @@ BuildRequires: golang(gopkg.in/check.v1)
 %endif
 
 %description
-%{summary}
+This parser is build as a go equivalent of the Python ConfigParser module and
+is aimed for maximum compatibility for both the file format and the API. This
+should make it easy to use existing python style configuration files from go
+and also ease the porting of existing python code.
+
 
 %if 0%{?with_devel}
 %package devel
