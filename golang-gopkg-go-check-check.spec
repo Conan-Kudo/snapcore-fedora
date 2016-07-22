@@ -2,6 +2,9 @@
 %global with_devel 1
 %global with_bundled 0
 %global with_debug 0
+# The tests are disabled because upstream runs a few benchmarks and on a run of
+# 100 tests it sometimes fails. This is reported upstream as
+# https://github.com/go-check/check/issues/81
 %global with_check 0
 %global with_unit_test 0
 %else
@@ -24,7 +27,7 @@
 %global repo            check
 # https://github.com/go-check/check
 %global import_path     gopkg.in/check.v1
-%global commit          64131543e7896d5bcc6bd5a76287eb75ea96c673
+%global commit          4f90aeace3a26ad7021961c297b22c42160c7b25
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-%{provider}-%{project}-%{repo}
@@ -44,8 +47,6 @@ BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 %endif
 
 %description
-%{summary}
-
 The Go language provides an internal testing library, named testing, which is
 relatively slim due to the fact that the standard library correctness by
 itself is verified using it. The check package, on the other hand, expects the
