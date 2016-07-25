@@ -45,7 +45,8 @@ BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 %endif
 
 %description
-%{summary}
+Go bindings for GNU gettext, an internationalization and localization library
+for writing multilingual systems.
 
 %if 0%{?with_devel}
 %package devel
