@@ -29,7 +29,7 @@ snap applications.
 
 %build
 autoreconf --force --install --verbose
-# snapd uses seccomp and apparmor, selinux support is not yet available
+# selinux support is not yet available, for now just disable apparmor
 %configure --disable-apparmor --enable-rootfs-is-core-snap --libdir=/usr/lib/snapd
 make %{?_smp_mflags}
 
