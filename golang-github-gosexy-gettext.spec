@@ -159,7 +159,7 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %endif
 
 %changelog
-* Fri Jun 10 2016 Zygmunt Krynicki - 0-0.1.git98b7b91
+* Fri Jun 10 2016 Zygmunt Krynicki <me@zygoon.pl> - 0-0.1.git98b7b91
 - First package for Fedora
 
 
