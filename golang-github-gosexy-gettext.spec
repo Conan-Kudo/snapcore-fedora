@@ -2,8 +2,8 @@
 %global with_devel 1
 %global with_bundled 0
 %global with_debug 0
-%global with_check 0
-%global with_unit_test 0
+%global with_check 1
+%global with_unit_test 1
 %else
 %global with_devel 0
 %global with_bundled 0
@@ -25,14 +25,14 @@
 # https://github.com/gosexy/gettext
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          98b7b91596d20b96909e6b60d57411547dd9959c
+%global commit          305f360aee30243660f32600b87c3c1eaa947187
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.1.git%{shortcommit}%{?dist}
+Release:        0.2.git%{shortcommit}%{?dist}
 Summary:        Gettext support for the Go language
-License:        MIT 
+License:        MIT
 URL:            https://%{provider_prefix}
 Source0:        https://%{provider_prefix}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
@@ -40,9 +40,6 @@ Source0:        https://%{provider_prefix}/archive/%{commit}/%{repo}-%{shortcomm
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
 # If go_compiler is not set to 1, there is no virtual provide. Use golang instead.
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
-
-%if ! 0%{?with_bundled}
-%endif
 
 %description
 Go bindings for GNU gettext, an internationalization and localization library
@@ -54,7 +51,10 @@ Summary:       %{summary}
 BuildArch:     noarch
 
 %if 0%{?with_check} && ! 0%{?with_bundled}
+BuildRequires: golang(github.com/stretchr/testify/assert)
 %endif
+
+Requires:      golang(github.com/stretchr/testify/assert)
 
 Provides:      golang(%{import_path}) = %{version}-%{release}
 
@@ -88,24 +88,15 @@ providing packages with %{import_path} prefix.
 %setup -q -n %{repo}-%{commit}
 
 %build
-mkdir -p src/github.com/gosexy
-ln -s ../../../ src/github.com/gosexy/gettext
-
-%if ! 0%{?with_bundled}
-export GOPATH=$(pwd):%{gopath}
-%else
-export GOPATH=$(pwd):$(pwd)/Godeps/_workspace:%{gopath}
-%endif
 
 %install
-install -d -p %{buildroot}%{_bindir}
-
 # source codes for building projects
 %if 0%{?with_devel}
 install -d -p %{buildroot}/%{gopath}/src/%{import_path}/
 echo "%%dir %%{gopath}/src/%%{import_path}/." >> devel.file-list
 # find all *.go but no *_test.go files and generate devel.file-list
-for file in $(find . -iname "*.go" \! -iname "*_test.go") ; do
+# NOTE: the _examples/ directory is required for unit tests to pass, it contains test data
+for file in $(find . -iname "*.go" \! -iname "*_test.go" -o -iname "_examples") ; do
     echo "%%dir %%{gopath}/src/%%{import_path}/$(dirname $file)" >> devel.file-list
     install -d -p %{buildroot}/%{gopath}/src/%{import_path}/$(dirname $file)
     cp -pav $file %{buildroot}/%{gopath}/src/%{import_path}/$file
@@ -117,7 +108,8 @@ done
 %if 0%{?with_unit_test} && 0%{?with_devel}
 install -d -p %{buildroot}/%{gopath}/src/%{import_path}/
 # find all *_test.go files and generate unit-test.file-list
-for file in $(find . -iname "*_test.go"); do
+# NOTE: the _examples/ directory is required for unit tests to pass, it contains test data
+for file in $(find . -iname "*_test.go" -o -iname "_examples"); do
     echo "%%dir %%{gopath}/src/%%{import_path}/$(dirname $file)" >> devel.file-list
     install -d -p %{buildroot}/%{gopath}/src/%{import_path}/$(dirname $file)
     cp -pav $file %{buildroot}/%{gopath}/src/%{import_path}/$file
@@ -136,7 +128,9 @@ export GOPATH=%{buildroot}/%{gopath}:%{gopath}
 %else
 export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %endif
+
 %gotest %{import_path}
+%gotest %{import_path}/go-xgettext
 %endif
 
 #define license tag if not already defined
@@ -160,7 +154,8 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %endif
 
 %changelog
+* Tue Jul 26 2016 Zygmunt Krynicki <me@zygoon.pl> - 0-0.2.git305f360
+- Update to latest upstream snapshot
+- Include test data in the devel and unit test packages and enable unit tests
 * Fri Jun 10 2016 Zygmunt Krynicki <me@zygoon.pl> - 0-0.1.git98b7b91
 - First package for Fedora
-
-
