@@ -15,8 +15,9 @@ BuildRequires:	glib2-devel
 BuildRequires:	indent
 BuildRequires:	libseccomp-devel
 BuildRequires:	python3-docutils
-BuildRequires:	systemd
 BuildRequires:	systemd-devel
+BuildRequires:  pkgconfig(systemd)
+BuildRequires:  pkgconfig(udev)
 
 %description
 The package is used internally by snapd to apply confinement to the started
@@ -30,8 +31,8 @@ snap applications.
 %build
 autoreconf --force --install --verbose
 # selinux support is not yet available, for now just disable apparmor
-%configure --disable-apparmor
-make %{?_smp_mflags}
+%configure --disable-apparmor --libexecdir=%{_libexecdir}/snapd
+%make_build
 
 
 %check
@@ -44,17 +45,18 @@ make check
 
 %files
 %doc README.md PORTING
-%attr(4755, root, root) %{_libexecdir}/snap-confine
+%attr(4755, root, root) %{_libexecdir}/snapd/snap-confine
 %{_bindir}/*
 %{_mandir}/*
-/usr/lib/udev/rules.d/80-snappy-assign.rules
-/usr/lib/udev/snappy-app-dev
+%{_udevrulesdir}/80-snappy-assign.rules
+%{_prefix}/lib/udev/snappy-app-dev
 
 
 %changelog
 * Mon Jul 25 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.38-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.38
+- Improve the packaging based on reviews
 * Thu Jul 7 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.35-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.35
