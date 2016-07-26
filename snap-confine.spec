@@ -11,11 +11,12 @@ Source0:	https://github.com/snapcore/snap-confine/releases/download/%{version}/%
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gcc
-BuildRequires:	glib2-devel
 BuildRequires:	indent
-BuildRequires:	libseccomp-devel
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(libseccomp)
 BuildRequires:	python3-docutils
 BuildRequires:	systemd-devel
+BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(systemd)
 BuildRequires:  pkgconfig(udev)
 
