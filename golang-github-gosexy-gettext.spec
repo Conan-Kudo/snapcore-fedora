@@ -59,9 +59,11 @@ BuildArch:     noarch
 
 %if 0%{?with_check} && ! 0%{?with_bundled}
 BuildRequires: golang(github.com/stretchr/testify/assert)
+BuildRequires: golang(gopkg.in/check.v1)
 %endif
 
 Requires:      golang(github.com/stretchr/testify/assert)
+Requires:      golang(gopkg.in/check.v1)
 
 Provides:      golang(%{import_path}) = %{version}-%{release}
 
