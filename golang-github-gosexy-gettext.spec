@@ -40,10 +40,17 @@ Source0:        https://%{provider_prefix}/archive/%{commit}/%{repo}-%{shortcomm
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
 # If go_compiler is not set to 1, there is no virtual provide. Use golang instead.
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
+BuildRequires:  golang(github.com/jessevdk/go-flags)
 
 %description
 Go bindings for GNU gettext, an internationalization and localization library
 for writing multilingual systems.
+
+%package -n go-xgettext
+Summary:        Program for extracting translatable strings from Go programs
+%description -n go-xgettext
+The go-xgettext program is an implementation of xgettext implemented in go.
+It can reliably parse go source files to identify content to translate.
 
 %if 0%{?with_devel}
 %package devel
@@ -88,8 +95,21 @@ providing packages with %{import_path} prefix.
 %setup -q -n %{repo}-%{commit}
 
 %build
+mkdir -p $(dirname src/%{import_path})
+ln -s ../../../ src/%{import_path}
+
+%if ! 0%{?with_bundled}
+export GOPATH=$(pwd):%{gopath}
+%else
+export GOPATH=$(pwd):$(pwd)/Godeps/_workspace:%{gopath}
+%endif
+
+%gobuild -o bin/go-xgettext %{import_path}/go-xgettext
 
 %install
+install -d -p %{buildroot}%{_bindir}
+install -p -m 0755 bin/go-xgettext %{buildroot}%{_bindir}
+
 # source codes for building projects
 %if 0%{?with_devel}
 install -d -p %{buildroot}/%{gopath}/src/%{import_path}/
@@ -153,7 +173,13 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %doc README.md
 %endif
 
+%files -n go-xgettext
+%doc LICENSE
+%{_bindir}/go-xgettext
+
 %changelog
+* Tue Aug 09 2016 Zygmunt Krynicki <me@zygoon.pl> - 0-0.3.git305f360
+- Build and install go-xgettext to a separate binary package
 * Tue Jul 26 2016 Zygmunt Krynicki <me@zygoon.pl> - 0-0.2.git305f360
 - Update to latest upstream snapshot
 - Include test data in the devel and unit test packages and enable unit tests
