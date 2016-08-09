@@ -45,7 +45,7 @@ make check
 
 
 %files
-%doc README.md PORTING
+%doc README.md PORTING COPYING
 %attr(4755, root, root) %{_libexecdir}/snapd/snap-confine
 %{_bindir}/*
 %{_mandir}/*
