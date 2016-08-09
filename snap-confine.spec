@@ -1,21 +1,21 @@
-Name:		snap-confine
-Version:	1.0.39
-Release:	1%{?dist}
-Summary:	Confinement system for snap applications
+Name:       snap-confine
+Version:    1.0.39
+Release:    1%{?dist}
+Summary:    Confinement system for snap applications
 
-Group:		System Environment/Base
-License:	GPLv3
-URL:		https://github.com/snapcore/snap-confine
-Source0:	https://github.com/snapcore/snap-confine/releases/download/%{version}/%{name}-%{version}.tar.gz
+Group:      System Environment/Base
+License:    GPLv3
+URL:        https://github.com/snapcore/snap-confine
+Source0:    https://github.com/snapcore/snap-confine/releases/download/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	gcc
-BuildRequires:	indent
-BuildRequires:	pkgconfig(glib-2.0)
-BuildRequires:	pkgconfig(libseccomp)
-BuildRequires:	python3-docutils
-BuildRequires:	systemd-devel
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  indent
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(libseccomp)
+BuildRequires:  python3-docutils
+BuildRequires:  systemd-devel
 BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(systemd)
 BuildRequires:  pkgconfig(udev)
