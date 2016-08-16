@@ -27,8 +27,8 @@
 %global import_path     %{provider_prefix}
 
 Name:           snapd
-Version:        2.0.10
-Release:        2%{?dist}
+Version:        2.11
+Release:        1%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files. 
 License:        GPL-3
 URL:            https://%{provider_prefix}
@@ -60,6 +60,7 @@ BuildRequires: golang(golang.org/x/crypto/ssh/terminal)
 BuildRequires: golang(gopkg.in/check.v1)
 BuildRequires: golang(gopkg.in/tomb.v2)
 BuildRequires: golang(gopkg.in/yaml.v2)
+BuildRequires: golang(gopkg.in/macaroon.v1)
 %endif
 
 %description
@@ -263,6 +264,8 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-1
+- New upstream release
 * Fri Jun 24 2016 Zygmunt Krynicki - 2.0.9-2
 - Depend on kernel-modules to ensure that squashfs can be loaded. Load it afer
   installing the package. This hopefully fixes
