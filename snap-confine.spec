@@ -51,8 +51,8 @@ make check
 %license COPYING
 %attr(0755,root,root) %caps(cap_sys_admin=pe) %{_libexecdir}/snapd/snap-confine
 %{_bindir}/ubuntu-core-launcher
-%{_mandir}/man1/ubuntu-core-launcher.1.gz
-%{_mandir}/man5/snap-confine.5.gz
+%{_mandir}/man1/ubuntu-core-launcher.1.*
+%{_mandir}/man5/snap-confine.5.*
 %{_prefix}/lib/udev/snappy-app-dev
 %{_udevrulesdir}/80-snappy-assign.rules
 
