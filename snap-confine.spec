@@ -47,7 +47,8 @@ make check
 
 
 %files
-%doc README.md PORTING COPYING
+%doc README.md PORTING
+%license COPYING
 %attr(0755,root,root) %caps(cap_sys_admin=pe) %{_libexecdir}/snapd/snap-confine
 %{_bindir}/ubuntu-core-launcher
 %{_mandir}/man1/ubuntu-core-launcher.1.gz
@@ -61,6 +62,7 @@ make check
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.39
 - Strip the setuid bit and use capabilities
+- Use %license instead of %doc for COPYING
 * Mon Jul 25 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.38-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.38
