@@ -7,6 +7,7 @@ Group:      System Environment/Base
 License:    GPLv3
 URL:        https://github.com/snapcore/snap-confine
 Source0:    https://github.com/snapcore/snap-confine/releases/download/%{version}/%{name}-%{version}.tar.gz
+Patch0:		snap-confine-not-setuid.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -27,12 +28,13 @@ snap applications.
 
 %prep
 %setup -q
+%patch0 -p1
 
 
 %build
 autoreconf --force --install --verbose
 # selinux support is not yet available, for now just disable apparmor
-%configure --disable-apparmor --libexecdir=%{_libexecdir}/snapd
+%configure --disable-apparmor --libexecdir=%{_libexecdir}/snapd/
 %make_build
 
 
@@ -46,17 +48,19 @@ make check
 
 %files
 %doc README.md PORTING COPYING
-%attr(4755, root, root) %{_libexecdir}/snapd/snap-confine
-%{_bindir}/*
-%{_mandir}/*
-%{_udevrulesdir}/80-snappy-assign.rules
+%attr(0755,root,root) %caps(cap_sys_admin=pe) %{_libexecdir}/snapd/snap-confine
+%{_bindir}/ubuntu-core-launcher
+%{_mandir}/man1/ubuntu-core-launcher.1.gz
+%{_mandir}/man5/snap-confine.5.gz
 %{_prefix}/lib/udev/snappy-app-dev
+%{_udevrulesdir}/80-snappy-assign.rules
 
 
 %changelog
 * Tue Aug 09 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.39-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.39
+- Strip the setuid bit and use capabilities
 * Mon Jul 25 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.38-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.38
