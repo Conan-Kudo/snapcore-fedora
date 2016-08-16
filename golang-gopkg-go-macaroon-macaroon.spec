@@ -28,7 +28,7 @@
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-%{provider}-%{project}-%{repo}
-Version:        0
+Version:        1
 Release:        0.1.git%{shortcommit}%{?dist}
 Summary:        A native Go implementation of macaroons
 License:        BSD
