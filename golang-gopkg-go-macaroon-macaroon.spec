@@ -33,7 +33,7 @@ Release:        0.1.git%{shortcommit}%{?dist}
 Summary:        A native Go implementation of macaroons
 License:        BSD
 URL:            https://gopkg.in/macaroon.v1
-Source0:        https://github.com/go-macaroon/macaroon/archive/%{commit}.tar.gz/macaroon-%{shortcommit}.tar.gz
+Source0:        https://github.com/go-macaroon/macaroon/archive/%{commit}.tar.gz#/macaroon-%{shortcommit}.tar.gz
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
