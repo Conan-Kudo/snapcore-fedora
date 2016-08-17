@@ -1,6 +1,6 @@
 Name:       snap-confine
 Version:    1.0.39
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Confinement system for snap applications
 
 Group:      System Environment/Base
@@ -58,11 +58,13 @@ make check
 
 
 %changelog
+* Wed Aug 17 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.39-2
+- Add the patch locally, not via sources
 * Tue Aug 09 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.39-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.39
 - Strip the setuid bit and use capabilities
-- Use %license instead of %doc for COPYING
+- Use %%license instead of %%doc for COPYING
 * Mon Jul 25 2016 Zygmunt Krynicki <me@zygoon.pl> - 1.0.38-1
 - New upstream release
   https://github.com/snapcore/snap-confine/releases/tag/1.0.38
