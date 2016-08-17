@@ -29,7 +29,7 @@
 Name:           snapd
 Version:        2.11
 Release:        1%{?dist}
-Summary:        The snapd and snap tools enable systems to work with .snap files. 
+Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPL-3
 URL:            https://%{provider_prefix}
 Source0:        https://%{provider_prefix}/archive/%{version}.tar.gz
@@ -64,7 +64,8 @@ BuildRequires: golang(gopkg.in/macaroon.v1)
 %endif
 
 %description
-%{summary}
+Snappy is a modern, cross-distribution, transactional package manager designed for
+working with self-contained, immutable packages.
 
 %if 0%{?with_devel}
 %package devel
