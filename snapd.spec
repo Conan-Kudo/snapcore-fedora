@@ -116,19 +116,21 @@ export GOPATH=$(pwd):$(pwd)/Godeps/_workspace:%{gopath}
 %endif
 
 %gobuild -o bin/snap %{import_path}/cmd/snap
+%gobuild -o bin/snap-exec %{import_path}/cmd/snap-exec
 %gobuild -o bin/snapd %{import_path}/cmd/snapd
 
 
 %install
 install -d -p %{buildroot}%{_bindir}
-install -d -p %{buildroot}%{_libexecdir}
+install -d -p %{buildroot}%{_libexecdir}/snapd
 install -d -p %{buildroot}%{_unitdir}
 install -d -p %{buildroot}%{_prefix}/lib/systemd/system-preset
 install -d -p %{buildroot}%{_sysconfdir}/profile.d
 
 # Install snap and snapd
 install -p -m 0755 bin/snap %{buildroot}%{_bindir}
-install -p -m 0755 bin/snapd %{buildroot}%{_libexecdir}
+install -p -m 0755 bin/snap-exec %{buildroot}%{_libexecdir}/snapd
+install -p -m 0755 bin/snapd %{buildroot}%{_libexecdir}/snapd
 
 # Install all systemd units
 install -p -m 0644 debian/snapd.socket %{buildroot}%{_unitdir}
@@ -139,7 +141,7 @@ install -p -m 0644 debian/snapd.frameworks-pre.target %{buildroot}%{_unitdir}
 install -p -m 0644 debian/snapd.frameworks.target %{buildroot}%{_unitdir}
 
 # Patch debianism out of the service files
-sed -i -e "s!/usr/lib/snapd/snapd!%{_libexecdir}/snapd!" %{buildroot}%{_unitdir}/snapd.service
+sed -i -e "s!/usr/lib/snapd/snapd!%{_libexecdir}/snapd/snapd!" %{buildroot}%{_unitdir}/snapd.service
 sed -i -e "s!/usr/bin/snap!%{_bindir}/snap!" %{buildroot}%{_unitdir}/snapd.refresh.service
 
 # Install systemd preset for running snapd
@@ -266,6 +268,7 @@ fi
 %changelog
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-1
 - New upstream release
+- Move private executables to /usr/libexec/snapd/
 * Fri Jun 24 2016 Zygmunt Krynicki - 2.0.9-2
 - Depend on kernel-modules to ensure that squashfs can be loaded. Load it afer
   installing the package. This hopefully fixes
