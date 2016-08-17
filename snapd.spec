@@ -125,7 +125,6 @@ export GOPATH=$(pwd):$(pwd)/Godeps/_workspace:%{gopath}
 install -d -p %{buildroot}%{_bindir}
 install -d -p %{buildroot}%{_libexecdir}/snapd
 install -d -p %{buildroot}%{_unitdir}
-install -d -p %{buildroot}%{_prefix}/lib/systemd/system-preset
 install -d -p %{buildroot}%{_sysconfdir}/profile.d
 
 # Install snap and snapd
@@ -144,14 +143,6 @@ install -p -m 0644 debian/snapd.frameworks.target %{buildroot}%{_unitdir}
 # Patch debianism out of the service files
 sed -i -e "s!/usr/lib/snapd/snapd!%{_libexecdir}/snapd/snapd!" %{buildroot}%{_unitdir}/snapd.service
 sed -i -e "s!/usr/bin/snap!%{_bindir}/snap!" %{buildroot}%{_unitdir}/snapd.refresh.service
-
-# Install systemd preset for running snapd
-cat << __SNAPD_PRESET__ > %{buildroot}%{_prefix}/lib/systemd/system-preset/91-snapd.preset
-enable snapd.socket
-enable snapd.service
-enable snapd.refresh.timer
-enable snapd.refresh.service
-__SNAPD_PRESET__
 
 # Put /snap/bin on PATH
 # Put /var/lib/snpad/desktop on XDG_DATA_DIRS
@@ -213,7 +204,6 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %{_bindir}/snap
 %{_libexecdir}/snapd
 %{_sysconfdir}/profile.d/snapd.sh
-%{_prefix}/lib/systemd/system-preset/91-snapd.preset
 %{_unitdir}/snapd.socket
 %{_unitdir}/snapd.service
 %{_unitdir}/snapd.frameworks-pre.target
@@ -267,6 +257,9 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-3
+- Remove systemd preset (will be requested separately according to distribution
+  standards).
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-2
 - Use Requires: kmod(squashfs.ko) instead of Requires: kernel-modules
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-1
