@@ -28,7 +28,7 @@
 
 Name:           snapd
 Version:        2.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPL-3
 URL:            https://%{provider_prefix}
@@ -44,7 +44,7 @@ BuildRequires:  systemd
 Requires:       snap-confine
 Requires:       squashfs-tools
 # we need squashfs.ko loaded
-Requires:       kernel-modules
+Requires:       kmod(squashfs.ko)
 
 %if ! 0%{?with_bundled}
 BuildRequires: golang(github.com/cheggaaa/pb)
@@ -267,6 +267,8 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-2
+- Use Requires: kmod(squashfs.ko) instead of Requires: kernel-modules
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-1
 - New upstream release
 - Move private executables to /usr/libexec/snapd/
