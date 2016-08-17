@@ -28,7 +28,7 @@
 
 Name:           snapd
 Version:        2.11
-Release:        4%{?dist}
+Release:        6%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPL-3
 URL:            https://%{provider_prefix}
@@ -227,35 +227,18 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 
 %post
 %systemd_post snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
-if [ $1 -eq 1 ]; then
-        systemctl start snapd.socket
-        systemctl start snapd.refresh.timer
-fi
 
 %preun
 %systemd_preun snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
 
 %postun
 %systemd_postun_with_restart snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
-if [ $1 -eq 0 ]; then 
-        # Remove all generated systemd mount units 
-        find /etc/systemd/system -name "snap-*.mount" -delete
-        # Remove all generated systemd service units 
-        find /etc/systemd/system -name "snap*.service" -delete
-        # Remove all symlinks to the two
-        find /etc/systemd/system/multi-user.target.wants -name "snap-*.mount" -delete
-        find /etc/systemd/system/multi-user.target.wants -name "snap*.service" -delete
-        # Unmount all snaps
-        if [ -n "$(mount | grep snap | awk '{print $3}')" ]; then
-                umount --lazy $(mount | grep snap | awk '{print $3}')
-        fi
-        # Remove all generated snap launchers and miscellaneous files
-        rm -rf /snap
-        # Remove all snapd state
-        rm -rf /var/lib/snapd
-fi
 
 %changelog
+* Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-6
+- Don't auto-start snapd.socket and snapd.refresh.timer
+* Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-5
+- Don't touch snapd state on removal
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-4
 - Use ExecStartPre to load squashfs.ko before snapd starts
 - Use dedicated systemd units for Fedora
