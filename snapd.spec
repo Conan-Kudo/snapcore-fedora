@@ -28,7 +28,7 @@
 
 Name:           snapd
 Version:        2.11
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPL-3
 URL:            https://%{provider_prefix}
@@ -128,6 +128,7 @@ install -d -p %{buildroot}%{_bindir}
 install -d -p %{buildroot}%{_libexecdir}/snapd
 install -d -p %{buildroot}%{_unitdir}
 install -d -p %{buildroot}%{_sysconfdir}/profile.d
+install -d -p %{buildroot}%{_sysconfdir}/sysconfig
 
 # Install snap and snapd
 install -p -m 0755 bin/snap %{buildroot}%{_bindir}
@@ -155,6 +156,9 @@ else
 fi
 export XDG_DATA_DIRS
 __SNAPD_SH__
+
+# Disable re-exec by default
+echo 'SNAP_REEXEC=0' > %{buildroot}%{_sysconfdir}/sysconfig/snapd
 
 # source codes for building projects
 %if 0%{?with_devel}
@@ -210,6 +214,7 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %{_unitdir}/snapd.frameworks.target
 %{_unitdir}/snapd.refresh.service
 %{_unitdir}/snapd.refresh.timer
+%config(noreplace) %{_sysconfdir}/sysconfig/snapd
 
 
 %if 0%{?with_devel}
@@ -235,6 +240,8 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %systemd_postun_with_restart snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
 
 %changelog
+* Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-7
+- Disable snapd re-exec feature by default
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-6
 - Don't auto-start snapd.socket and snapd.refresh.timer
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-5
