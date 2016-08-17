@@ -28,11 +28,12 @@
 
 Name:           snapd
 Version:        2.11
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPL-3
 URL:            https://%{provider_prefix}
 Source0:        https://%{provider_prefix}/archive/%{version}.tar.gz
+Patch0:         0001-Add-systemd-units-for-Fedora.patch
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
@@ -105,6 +106,7 @@ providing packages with %{import_path} prefix.
 
 %prep
 %setup -q -n %{name}-%{version}
+%patch0 -p1
 
 %build
 mkdir -p src/github.com/snapcore
@@ -133,16 +135,14 @@ install -p -m 0755 bin/snap-exec %{buildroot}%{_libexecdir}/snapd
 install -p -m 0755 bin/snapd %{buildroot}%{_libexecdir}/snapd
 
 # Install all systemd units
-install -p -m 0644 debian/snapd.socket %{buildroot}%{_unitdir}
-install -p -m 0644 debian/snapd.service %{buildroot}%{_unitdir}
-install -p -m 0644 debian/snapd.refresh.service %{buildroot}%{_unitdir}
-install -p -m 0644 debian/snapd.refresh.timer %{buildroot}%{_unitdir}
+install -p -m 0644 snapd.socket %{buildroot}%{_unitdir}
+install -p -m 0644 snapd.service %{buildroot}%{_unitdir}
+install -p -m 0644 snapd.refresh.service %{buildroot}%{_unitdir}
+install -p -m 0644 snapd.refresh.timer %{buildroot}%{_unitdir}
+
+# Install legacy units (should be removed upstream soon)
 install -p -m 0644 debian/snapd.frameworks-pre.target %{buildroot}%{_unitdir}
 install -p -m 0644 debian/snapd.frameworks.target %{buildroot}%{_unitdir}
-
-# Patch debianism out of the service files
-sed -i -e "s!/usr/lib/snapd/snapd!%{_libexecdir}/snapd/snapd!" %{buildroot}%{_unitdir}/snapd.service
-sed -i -e "s!/usr/bin/snap!%{_bindir}/snap!" %{buildroot}%{_unitdir}/snapd.refresh.service
 
 # Put /snap/bin on PATH
 # Put /var/lib/snpad/desktop on XDG_DATA_DIRS
@@ -230,7 +230,6 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 if [ $1 -eq 1 ]; then
         systemctl start snapd.socket
         systemctl start snapd.refresh.timer
-        modprobe squashfs
 fi
 
 %preun
@@ -257,6 +256,9 @@ if [ $1 -eq 0 ]; then
 fi
 
 %changelog
+* Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-4
+- Use ExecStartPre to load squashfs.ko before snapd starts
+- Use dedicated systemd units for Fedora
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-3
 - Remove systemd preset (will be requested separately according to distribution
   standards).
