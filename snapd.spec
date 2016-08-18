@@ -28,7 +28,7 @@
 
 Name:           snapd
 Version:        2.11
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPL-3
 URL:            https://%{provider_prefix}
@@ -215,7 +215,12 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %{_unitdir}/snapd.refresh.service
 %{_unitdir}/snapd.refresh.timer
 %config(noreplace) %{_sysconfdir}/sysconfig/snapd
-
+%dir %{_sharedstatedir}/snapd
+%dir %{_sharedstatedir}/snapd/assertions
+%dir %{_sharedstatedir}/snapd/desktop
+%dir %{_sharedstatedir}/snapd/mount
+%dir %{_sharedstatedir}/snapd/seccomp
+%dir %{_sharedstatedir}/snapd/snaps
 
 %if 0%{?with_devel}
 %files devel -f devel.file-list
@@ -240,6 +245,8 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %systemd_postun_with_restart snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
 
 %changelog
+* Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-8
+- Add %%dir entries for various snapd directories
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-7
 - Disable snapd re-exec feature by default
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-6
