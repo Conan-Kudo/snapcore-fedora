@@ -250,9 +250,9 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %systemd_postun_with_restart snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
 
 %changelog
-* Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-2
+* Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.12-2
 - Correct license identifier
-* Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-1
+* Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.12-1
 - New upstream release
 * Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-8
 - Add %%dir entries for various snapd directories
