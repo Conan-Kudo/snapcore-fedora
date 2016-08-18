@@ -129,6 +129,11 @@ install -d -p %{buildroot}%{_libexecdir}/snapd
 install -d -p %{buildroot}%{_unitdir}
 install -d -p %{buildroot}%{_sysconfdir}/profile.d
 install -d -p %{buildroot}%{_sysconfdir}/sysconfig
+install -d -p %{buildroot}%{_sharedstatedir}/snapd/assertions
+install -d -p %{buildroot}%{_sharedstatedir}/snapd/desktop
+install -d -p %{buildroot}%{_sharedstatedir}/snapd/mount
+install -d -p %{buildroot}%{_sharedstatedir}/snapd/seccomp
+install -d -p %{buildroot}%{_sharedstatedir}/snapd/snaps
 
 # Install snap and snapd
 install -p -m 0755 bin/snap %{buildroot}%{_bindir}
