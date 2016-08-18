@@ -32,7 +32,7 @@ Release:        8%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPL-3
 URL:            https://%{provider_prefix}
-Source0:        https://%{provider_prefix}/archive/%{version}.tar.gz
+Source0:        https://%{provider_prefix}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         0001-Add-systemd-units-for-Fedora.patch
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
@@ -247,6 +247,7 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %changelog
 * Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-8
 - Add %%dir entries for various snapd directories
+- Tweak Source0 URL
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-7
 - Disable snapd re-exec feature by default
 * Tue Aug 16 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-6
