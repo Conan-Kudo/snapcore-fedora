@@ -28,9 +28,9 @@
 
 Name:           snapd
 Version:        2.12
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
-License:        GPL-3
+License:        GPLv3
 URL:            https://%{provider_prefix}
 Source0:        https://%{provider_prefix}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         0001-Add-systemd-units-for-Fedora.patch
@@ -250,6 +250,8 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %systemd_postun_with_restart snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
 
 %changelog
+* Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-2
+- Correct license identifier
 * Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-1
 - New upstream release
 * Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.11-8
