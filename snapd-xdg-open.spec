@@ -1,7 +1,7 @@
 Name:       snapd-xdg-open
 Version:    0.0.0 
 Release:    1%{?dist}
-Summary:    DBus-based bridge for xdg-open within used by snap applications
+Summary:    Bridge allowing (untrusted) snap applications to use xdg-open
 
 Group:      System Environment/Base
 License:    GPLv3
