@@ -5,8 +5,8 @@ Summary:    Bridge allowing (untrusted) snap applications to use xdg-open
 
 Group:      System Environment/Base
 License:    GPLv3
-URL:        https://github.com/ubuntu-core/snapd-xdg-open
-Source0:    https://github.com/ubuntu-core/snapd-xdg-open/releases/download/%{version}/%{name}-%{version}.tar.gz
+URL:        https://github.com/snapcore/snapd-xdg-open
+Source0:    https://github.com/snapcore/snapd-xdg-open/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake
