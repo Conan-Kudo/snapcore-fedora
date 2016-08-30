@@ -27,7 +27,7 @@
 %global import_path     %{provider_prefix}
 
 Name:           snapd
-Version:        2.13
+Version:        2.14
 Release:        1%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPLv3
@@ -250,6 +250,8 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %systemd_postun_with_restart snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
 
 %changelog
+* Tue Aug 30 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.14-1
+- New upstream release
 * Tue Aug 23 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.13-1
 - New upstream release
 * Thu Aug 18 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.12-2
