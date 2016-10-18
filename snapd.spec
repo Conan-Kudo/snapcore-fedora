@@ -26,14 +26,24 @@
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
 
+# SELinux policy globals
+%global polmodname snapcore-selinux
+%global commit1 683d445b450d70bed8e3c4b76bb3d228960e75b5
+%global shortcommit1 %(c=%{commit1}; echo ${c:0:7})
+%global snapdate 20161018
+
+
 Name:           snapd
 Version:        2.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPLv3
 URL:            https://%{provider_prefix}
 Source0:        https://%{provider_prefix}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         0001-Add-systemd-units-for-Fedora.patch
+
+# snapcore SELinux policy
+Source1:        https://gitlab.com/Conan_Kudo/snapcore-selinux/repository/archive.tar.gz?ref=%{commit1}#/%{polmodname}-%{shortcommit1}.tar.gz
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
@@ -46,6 +56,9 @@ Requires:       snap-confine
 Requires:       squashfs-tools
 # we need squashfs.ko loaded
 Requires:       kmod(squashfs.ko)
+
+# Force the SELinux module to be installed
+Requires:       %{name}-selinux = %{version}-%{release}
 
 %if ! 0%{?with_bundled}
 BuildRequires: golang(github.com/cheggaaa/pb)
@@ -67,6 +80,22 @@ BuildRequires: golang(gopkg.in/macaroon.v1)
 %description
 Snappy is a modern, cross-distribution, transactional package manager designed for
 working with self-contained, immutable packages.
+
+%package selinux
+Summary:        SELinux module for snapd
+License:        GPLv2+
+BuildArch:      noarch
+BuildRequires:  selinux-policy, selinux-policy-devel
+Requires(post): selinux-policy-base >= %{_selinux_policy_version}
+Requires(post): policycoreutils
+Requires(post): policycoreutils-python-utils
+Requires(pre):  libselinux-utils
+Requires(post): libselinux-utils
+
+%description selinux
+This package provides the SELinux policy module to ensure snapd runs properly
+under an environment with SELinux enabled.
+
 
 %if 0%{?with_devel}
 %package devel
@@ -108,7 +137,16 @@ providing packages with %{import_path} prefix.
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 
+# Extract source for SELinux policy module
+tar xvf %{SOURCE1}
+
 %build
+# Build SELinux module
+pushd ./%{polmodname}-%{commit1}-%{commit1}
+make SHARE="%{_datadir}" TARGETS="snappy"
+popd
+
+# Build snapd
 mkdir -p src/github.com/snapcore
 ln -s ../../../ src/github.com/snapcore/snapd
 
@@ -134,6 +172,12 @@ install -d -p %{buildroot}%{_sharedstatedir}/snapd/desktop
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/mount
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/seccomp
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/snaps
+install -d -p %{buildroot}%{_datadir}/selinux/devel/include/contrib
+install -d -p %{buildroot}%{_datadir}/selinux/packages
+
+# Install SELinux module
+install -p -m 0644 snappy.if %{buildroot}%{_datadir}/selinux/devel/include/contrib
+install -p -m 0644 snappy.pp.bz2 %{buildroot}%{_datadir}/selinux/packages
 
 # Install snap and snapd
 install -p -m 0755 bin/snap %{buildroot}%{_bindir}
@@ -207,6 +251,12 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 #define license tag if not already defined
 %{!?_licensedir:%global license %doc}
 
+%files selinux
+%license snapcore-selinux-%{commit1}-%{commit1}/COPYING
+%doc snapcore-selinux-%{commit1}-%{commit1}/README.md
+%{_datadir}/selinux/packages/snappy.pp.bz2
+%{_datadir}/selinux/devel/include/contrib/snappy.if
+
 %files
 %license COPYING 
 %doc README.md
@@ -249,7 +299,20 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %postun
 %systemd_postun_with_restart snapd.service snapd.socket snapd.refresh.timer snapd.refresh.service
 
+%pre selinux
+%selinux_relabel_pre
+
+%post selinux
+%selinux_modules_install snappy
+%selinux_relabel_post
+
+%postun selinux
+%selinux_modules_uninstall snappy
+%selinux_relabel_post
+
 %changelog
+* Tue Oct 18 2016 Neal Gompa <ngompa13@gmail.com> - 2.14-2
+- Add SELinux policy module subpackage
 * Tue Aug 30 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.14-1
 - New upstream release
 * Tue Aug 23 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.13-1
