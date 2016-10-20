@@ -31,6 +31,7 @@
 %global commit1 683d445b450d70bed8e3c4b76bb3d228960e75b5
 %global shortcommit1 %(c=%{commit1}; echo ${c:0:7})
 %global snapdate 20161018
+%global polmodfolder %{polmodname}-%{commit1}-%{commit1}
 
 
 Name:           snapd
@@ -142,7 +143,7 @@ tar xvf %{SOURCE1}
 
 %build
 # Build SELinux module
-pushd ./%{polmodname}-%{commit1}-%{commit1}
+pushd ./%{polmodfolder}
 make SHARE="%{_datadir}" TARGETS="snappy"
 popd
 
@@ -176,8 +177,8 @@ install -d -p %{buildroot}%{_datadir}/selinux/devel/include/contrib
 install -d -p %{buildroot}%{_datadir}/selinux/packages
 
 # Install SELinux module
-install -p -m 0644 snappy.if %{buildroot}%{_datadir}/selinux/devel/include/contrib
-install -p -m 0644 snappy.pp.bz2 %{buildroot}%{_datadir}/selinux/packages
+install -p -m 0644 %{polmodfolder}/snappy.if %{buildroot}%{_datadir}/selinux/devel/include/contrib
+install -p -m 0644 %{polmodfolder}/snappy.pp.bz2 %{buildroot}%{_datadir}/selinux/packages
 
 # Install snap and snapd
 install -p -m 0755 bin/snap %{buildroot}%{_bindir}
@@ -194,10 +195,10 @@ install -p -m 0644 snapd.refresh.timer %{buildroot}%{_unitdir}
 install -p -m 0644 debian/snapd.frameworks-pre.target %{buildroot}%{_unitdir}
 install -p -m 0644 debian/snapd.frameworks.target %{buildroot}%{_unitdir}
 
-# Put /snap/bin on PATH
-# Put /var/lib/snpad/desktop on XDG_DATA_DIRS
+# Put /var/lib/snapd/snap/bin on PATH
+# Put /var/lib/snapd/desktop on XDG_DATA_DIRS
 cat << __SNAPD_SH__ > %{buildroot}%{_sysconfdir}/profile.d/snapd.sh
-PATH=$PATH:/snap/bin
+PATH=$PATH:/var/lib/snapd/snap/bin
 if [ -z "$XDG_DATA_DIRS" ]; then
     XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
 else
