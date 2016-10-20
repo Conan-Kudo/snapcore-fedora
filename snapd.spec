@@ -34,8 +34,8 @@
 
 
 Name:           snapd
-Version:        2.14
-Release:        2%{?dist}
+Version:        2.16
+Release:        1%{?dist}
 Summary:        The snapd and snap tools enable systems to work with .snap files
 License:        GPLv3
 URL:            https://%{provider_prefix}
@@ -311,6 +311,8 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %selinux_relabel_post
 
 %changelog
+* Wed Oct 19 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.16-1
+- New upstream release
 * Tue Oct 18 2016 Neal Gompa <ngompa13@gmail.com> - 2.14-2
 - Add SELinux policy module subpackage
 * Tue Aug 30 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.14-1
