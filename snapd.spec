@@ -28,16 +28,16 @@
 
 # SELinux policy globals
 %global polmodname snapcore-selinux
-%global commit1 683d445b450d70bed8e3c4b76bb3d228960e75b5
+%global commit1 daa87ed3b5324e040e426811683d7c38c7a7ae37
 %global shortcommit1 %(c=%{commit1}; echo ${c:0:7})
-%global snapdate 20161018
+%global snapdate 20161027
 %global polmodfolder %{polmodname}-%{commit1}-%{commit1}
 
 
 Name:           snapd
 Version:        2.16
 Release:        1%{?dist}
-Summary:        The snapd and snap tools enable systems to work with .snap files
+Summary:        A transactional software package manager
 License:        GPLv3
 URL:            https://%{provider_prefix}
 Source0:        https://%{provider_prefix}/archive/%{version}/%{name}-%{version}.tar.gz
@@ -255,8 +255,8 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %{!?_licensedir:%global license %doc}
 
 %files selinux
-%license snapcore-selinux-%{commit1}-%{commit1}/COPYING
-%doc snapcore-selinux-%{commit1}-%{commit1}/README.md
+%license %{polmodfolder}/COPYING
+%doc %{polmodfolder}/README.md
 %{_datadir}/selinux/packages/snappy.pp.bz2
 %{_datadir}/selinux/devel/include/contrib/snappy.if
 
@@ -306,12 +306,15 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %selinux_relabel_pre
 
 %post selinux
-%selinux_modules_install snappy
+%selinux_modules_install %{_datadir}/selinux/packages/snappy.pp.bz2
 %selinux_relabel_post
 
 %postun selinux
 %selinux_modules_uninstall snappy
-%selinux_relabel_post
+if [ $1 -eq 0 ]; then
+    %selinux_relabel_post
+fi
+
 
 %changelog
 * Wed Oct 19 2016 Zygmunt Krynicki <me@zygoon.pl> - 2.16-1

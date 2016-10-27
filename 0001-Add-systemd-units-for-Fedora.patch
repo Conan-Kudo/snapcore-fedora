@@ -60,7 +60,7 @@ index 0000000..2c41943
 +[Service]
 +ExecStart=/usr/libexec/snapd/snapd
 +ExecStartPre=/usr/sbin/modprobe squashfs
-+EnvironmentFile=/etc/environment
++EnvironmentFile=-/etc/sysconfig/snapd
 +
 +[Install]
 +WantedBy=multi-user.target
