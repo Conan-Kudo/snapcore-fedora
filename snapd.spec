@@ -41,8 +41,9 @@ Summary:        A transactional software package manager
 License:        GPLv3
 URL:            https://%{provider_prefix}
 Source0:        https://%{provider_prefix}/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:         0001-Add-systemd-units-for-Fedora.patch
+Patch0:         0001-dist-Add-generic-systemd-units.patch
 Patch1:         0001-dirs-FEDORA-use-alternate-snap-mount-directory.patch
+Patch2:         0001-docs-Fix-binary-path-referenced-in-documentation.patch
 # snapcore SELinux policy
 Source1:        https://gitlab.com/Conan_Kudo/snapcore-selinux/repository/archive.tar.gz?ref=%{commit1}#/%{polmodname}-%{shortcommit1}.tar.gz
 
@@ -137,8 +138,9 @@ providing packages with %{import_path} prefix.
 
 %prep
 %setup -q -n %{name}-%{version}
-%patch0 -p1
-%patch1 -p1
+%patch0 -p1 -b .systemd
+%patch1 -p1 -b .snapdir
+%patch2 -p1 -b .docfix
 
 # Extract source for SELinux policy module
 tar xvf %{SOURCE1}
@@ -167,7 +169,9 @@ export GOPATH=$(pwd):$(pwd)/Godeps/_workspace:%{gopath}
 %install
 install -d -p %{buildroot}%{_bindir}
 install -d -p %{buildroot}%{_libexecdir}/snapd
+install -d -p %{buildroot}%{_mandir}/man8
 install -d -p %{buildroot}%{_unitdir}
+install -d -p %{buildroot}%{_udevrulesdir}
 install -d -p %{buildroot}%{_sysconfdir}/profile.d
 install -d -p %{buildroot}%{_sysconfdir}/sysconfig
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/assertions
@@ -175,6 +179,7 @@ install -d -p %{buildroot}%{_sharedstatedir}/snapd/desktop
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/mount
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/seccomp
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/snaps
+install -d -p %{buildroot}%{_sharedstatedir}/snapd/snap
 install -d -p %{buildroot}%{_datadir}/selinux/devel/include/contrib
 install -d -p %{buildroot}%{_datadir}/selinux/packages
 
@@ -187,15 +192,18 @@ install -p -m 0755 bin/snap %{buildroot}%{_bindir}
 install -p -m 0755 bin/snap-exec %{buildroot}%{_libexecdir}/snapd
 install -p -m 0755 bin/snapd %{buildroot}%{_libexecdir}/snapd
 
-# Install all systemd units
-install -p -m 0644 snapd.socket %{buildroot}%{_unitdir}
-install -p -m 0644 snapd.service %{buildroot}%{_unitdir}
-install -p -m 0644 snapd.refresh.service %{buildroot}%{_unitdir}
-install -p -m 0644 snapd.refresh.timer %{buildroot}%{_unitdir}
+# Install snap(8) man page
+bin/snap help --man > %{buildroot}%{_mandir}/man8/snap.8
 
-# Install legacy units (should be removed upstream soon)
-install -p -m 0644 debian/snapd.frameworks-pre.target %{buildroot}%{_unitdir}
-install -p -m 0644 debian/snapd.frameworks.target %{buildroot}%{_unitdir}
+# Install all systemd units
+install -p -m 0644 dist/snapd.socket %{buildroot}%{_unitdir}
+install -p -m 0644 dist/snapd.service %{buildroot}%{_unitdir}
+install -p -m 0644 dist/snapd.autoimport.service %{buildroot}%{_unitdir}
+install -p -m 0644 dist/snapd.refresh.service %{buildroot}%{_unitdir}
+install -p -m 0644 dist/snapd.refresh.timer %{buildroot}%{_unitdir}
+
+# Install udev rules (must run before udisks2)
+install -p -m 0644 debian/snapd.autoimport.udev %{buildroot}%{_udevrulesdir}/66-snapd-autoimport.rules
 
 # Put /var/lib/snapd/snap/bin on PATH
 # Put /var/lib/snapd/desktop on XDG_DATA_DIRS
@@ -262,14 +270,15 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 
 %files
 %license COPYING 
-%doc README.md
+%doc README.md docs/*
 %{_bindir}/snap
 %{_libexecdir}/snapd
+%{_mandir}/man8/snap.8*
 %{_sysconfdir}/profile.d/snapd.sh
+%{_udevrulesdir}/66-snapd-autoimport.rules
 %{_unitdir}/snapd.socket
 %{_unitdir}/snapd.service
-%{_unitdir}/snapd.frameworks-pre.target
-%{_unitdir}/snapd.frameworks.target
+%{_unitdir}/snapd.autoimport.service
 %{_unitdir}/snapd.refresh.service
 %{_unitdir}/snapd.refresh.timer
 %config(noreplace) %{_sysconfdir}/sysconfig/snapd
@@ -279,6 +288,7 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %dir %{_sharedstatedir}/snapd/mount
 %dir %{_sharedstatedir}/snapd/seccomp
 %dir %{_sharedstatedir}/snapd/snaps
+%dir %{_sharedstatedir}/snapd/snap
 
 %if 0%{?with_devel}
 %files devel -f devel.file-list
