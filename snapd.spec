@@ -198,12 +198,8 @@ bin/snap help --man > %{buildroot}%{_mandir}/man8/snap.8
 # Install all systemd units
 install -p -m 0644 dist/snapd.socket %{buildroot}%{_unitdir}
 install -p -m 0644 dist/snapd.service %{buildroot}%{_unitdir}
-install -p -m 0644 dist/snapd.autoimport.service %{buildroot}%{_unitdir}
 install -p -m 0644 dist/snapd.refresh.service %{buildroot}%{_unitdir}
 install -p -m 0644 dist/snapd.refresh.timer %{buildroot}%{_unitdir}
-
-# Install udev rules (must run before udisks2)
-install -p -m 0644 debian/snapd.autoimport.udev %{buildroot}%{_udevrulesdir}/66-snapd-autoimport.rules
 
 # Put /var/lib/snapd/snap/bin on PATH
 # Put /var/lib/snapd/desktop on XDG_DATA_DIRS
@@ -275,10 +271,8 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %{_libexecdir}/snapd
 %{_mandir}/man8/snap.8*
 %{_sysconfdir}/profile.d/snapd.sh
-%{_udevrulesdir}/66-snapd-autoimport.rules
 %{_unitdir}/snapd.socket
 %{_unitdir}/snapd.service
-%{_unitdir}/snapd.autoimport.service
 %{_unitdir}/snapd.refresh.service
 %{_unitdir}/snapd.refresh.timer
 %config(noreplace) %{_sysconfdir}/sysconfig/snapd
