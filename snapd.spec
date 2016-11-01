@@ -47,6 +47,8 @@ Patch2:         0001-docs-Fix-binary-path-referenced-in-documentation.patch
 # snapcore SELinux policy
 Source1:        https://gitlab.com/Conan_Kudo/snapcore-selinux/repository/archive.tar.gz?ref=%{commit1}#/%{polmodname}-%{shortcommit1}.tar.gz
 
+# SELinux policy patches
+Patch500:       snapd-selinux-allow-tmp.patch
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
@@ -144,6 +146,9 @@ providing packages with %{import_path} prefix.
 
 # Extract source for SELinux policy module
 tar xvf %{SOURCE1}
+pushd ./%{polmodfolder}
+%patch500 -p1 -b .allowtmp
+popd
 
 %build
 # Build SELinux module
