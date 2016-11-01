@@ -1,12 +1,12 @@
 Name:		snapd-glib
-Version:	0.14
+Version:	1.2
 Release:	1%{?dist}
 Summary:	Library providing a GLib interface to snapd.
 
 Group:		System Environment/Libraries
 License:	LGPLv2 or LGPLv3
 URL:		https://launchpad.net/%{name}
-Source0:	https://launchpad.net/%{name}/0.x/%{version}/+download/%{name}-%{version}.tar.xz
+Source0:	https://launchpad.net/%{name}/1.x/%{version}/+download/%{name}-%{version}.tar.xz
 
 BuildRequires:	gtk-doc
 BuildRequires:  autoconf
@@ -70,7 +70,7 @@ find %{buildroot} -name "*.la" -delete
 %license COPYING.LGPL2 COPYING.LGPL3
 %doc NEWS
 %{_libdir}/libsnapd-glib.so.*
-%{_libdir}/girepository-1.0/Snapd-0.typelib
+%{_libdir}/girepository-1.0/Snapd-1.typelib
 
 %files devel
 %doc %{_datadir}/gtk-doc/html/snapd-glib
@@ -78,7 +78,7 @@ find %{buildroot} -name "*.la" -delete
 %{_libdir}/libsnapd-glib.so
 %{_libdir}/pkgconfig/snapd-glib.pc
 %{_datadir}/vala/vapi/snapd-glib.*
-%{_datadir}/gir-1.0/Snapd-0.gir
+%{_datadir}/gir-1.0/Snapd-1.gir
 
 %files -n snapd-login-service
 %{_libexecdir}/snapd/snapd-login-service
@@ -88,6 +88,8 @@ find %{buildroot} -name "*.la" -delete
 %{_datadir}/polkit-1/actions/io.snapcraft.SnapdLoginService.policy
 
 %changelog
+* Tue Nov 1 2016  Zygmunt Krynicki <me@zygoon.pl> - 1.2-1
+- Update to latest upstream release
 * Tue Sep 27 2016 Neal Gompa <ngompa13@gmail.com> - 0.14-1
 - Flesh out spec and add subpackages for devel and login service
 * Thu Sep 08 2016 Zygmunt Krynicki <me@zygoon.pl> - 0.14-0
