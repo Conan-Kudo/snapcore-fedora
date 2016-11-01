@@ -55,7 +55,7 @@ BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 # BuildRequires:  systemd-units
 BuildRequires:  systemd
 %{?systemd_requires}
-Requires:       snap-confine
+Requires:       snap-confine >= 1.0.44-2
 Requires:       squashfs-tools
 # we need squashfs.ko loaded
 Requires:       kmod(squashfs.ko)
