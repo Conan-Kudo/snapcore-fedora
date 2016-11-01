@@ -169,7 +169,7 @@ export GOPATH=$(pwd):$(pwd)/Godeps/_workspace:%{gopath}
 %install
 install -d -p %{buildroot}%{_bindir}
 install -d -p %{buildroot}%{_libexecdir}/snapd
-install -d -p %{buildroot}%{_mandir}/man8
+install -d -p %{buildroot}%{_mandir}/man1
 install -d -p %{buildroot}%{_unitdir}
 install -d -p %{buildroot}%{_sysconfdir}/profile.d
 install -d -p %{buildroot}%{_sysconfdir}/sysconfig
