@@ -28,9 +28,9 @@
 
 # SELinux policy globals
 %global polmodname snapcore-selinux
-%global commit1 daa87ed3b5324e040e426811683d7c38c7a7ae37
+%global commit1 6331fd4a058271b0246714bc6746ab1e7ce2aa09
 %global shortcommit1 %(c=%{commit1}; echo ${c:0:7})
-%global snapdate 20161027
+%global snapdate 20161101
 %global polmodfolder %{polmodname}-%{commit1}-%{commit1}
 
 
@@ -171,7 +171,6 @@ install -d -p %{buildroot}%{_bindir}
 install -d -p %{buildroot}%{_libexecdir}/snapd
 install -d -p %{buildroot}%{_mandir}/man8
 install -d -p %{buildroot}%{_unitdir}
-install -d -p %{buildroot}%{_udevrulesdir}
 install -d -p %{buildroot}%{_sysconfdir}/profile.d
 install -d -p %{buildroot}%{_sysconfdir}/sysconfig
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/assertions
@@ -180,6 +179,7 @@ install -d -p %{buildroot}%{_sharedstatedir}/snapd/mount
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/seccomp
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/snaps
 install -d -p %{buildroot}%{_sharedstatedir}/snapd/snap
+install -d -p %{buildroot}%{_localstatedir}/snap
 install -d -p %{buildroot}%{_datadir}/selinux/devel/include/contrib
 install -d -p %{buildroot}%{_datadir}/selinux/packages
 
@@ -192,8 +192,8 @@ install -p -m 0755 bin/snap %{buildroot}%{_bindir}
 install -p -m 0755 bin/snap-exec %{buildroot}%{_libexecdir}/snapd
 install -p -m 0755 bin/snapd %{buildroot}%{_libexecdir}/snapd
 
-# Install snap(8) man page
-bin/snap help --man > %{buildroot}%{_mandir}/man8/snap.8
+# Install snap(1) man page
+bin/snap help --man > %{buildroot}%{_mandir}/man1/snap.1
 
 # Install all systemd units
 install -p -m 0644 dist/snapd.socket %{buildroot}%{_unitdir}
@@ -269,7 +269,7 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %doc README.md docs/*
 %{_bindir}/snap
 %{_libexecdir}/snapd
-%{_mandir}/man8/snap.8*
+%{_mandir}/man1/snap.1*
 %{_sysconfdir}/profile.d/snapd.sh
 %{_unitdir}/snapd.socket
 %{_unitdir}/snapd.service
@@ -283,6 +283,7 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/Godeps/_workspace:%{gopath}
 %dir %{_sharedstatedir}/snapd/seccomp
 %dir %{_sharedstatedir}/snapd/snaps
 %dir %{_sharedstatedir}/snapd/snap
+%dir %{_localstatedir}/snap
 
 %if 0%{?with_devel}
 %files devel -f devel.file-list
