@@ -32,7 +32,7 @@ index 0000000..1e9325b
 +After=network-online.target snapd.socket
 +Requires=snapd.socket
 +ConditionPathExistsGlob=/var/lib/snapd/snap/*/current
-+Documentation=man:snap(8)
++Documentation=man:snap(1)
 +
 +# FIXME: add auto-reboot on devices
 +[Service]
