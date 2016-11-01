@@ -1,7 +1,7 @@
 Name:		snapd-glib
 Version:	1.2
 Release:	1%{?dist}
-Summary:	Library providing a GLib interface to snapd.
+Summary:	Library providing a GLib interface to snapd
 
 Group:		System Environment/Libraries
 License:	LGPLv2 or LGPLv3
