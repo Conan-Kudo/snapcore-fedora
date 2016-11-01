@@ -13,6 +13,7 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  gobject-introspection-devel
+BuildRequires:  intltool
 BuildRequires:  libtool 
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(gio-unix-2.0)
